@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Sign in · Hostel AI{% endblock %}
+{% block auth_content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="brand">
+      <div class="brand__mark" style="background:linear-gradient(135deg,#4A55D8,#8B6CF0);">H</div>
+      <div class="brand__text" style="color:#1A1D2E;">Hostel AI<small style="color:#666B8A;">Grievance Intelligence</small></div>
+    </div>
+    <h2 style="font-size:19px; margin-bottom:2px;">Welcome back</h2>
+    <p style="color:#666B8A; font-size:13.5px; margin-bottom:20px;">Sign in to submit, track, and follow up on hostel grievances.</p>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger py-2 px-3" style="font-size:13px; border-radius:8px;">
+        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" required autofocus>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" required>
+      </div>
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" class="btn btn-primary-hai w-100 mt-2">Sign in</button>
+    </form>
+
+    <p style="text-align:center; font-size:13px; margin-top:16px; color:#666B8A;">
+      New here? <a href="{% url 'signup' %}" style="color:#4A55D8; font-weight:600;">Create an account</a>
+      <span style="color:#B9B9C6;">(Student or Parent)</span>
+    </p>
+    <p style="text-align:center; font-size:12.5px; margin-top:6px;">
+      <a href="{% url 'staff_login' %}" style="color:#666B8A;">Warden / Admin? Staff login &rarr;</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

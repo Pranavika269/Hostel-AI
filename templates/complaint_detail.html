@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ complaint.title }} · Hostel AI{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1>{{ complaint.title }}</h1>
+    <p>Filed by {{ complaint.student.get_full_name|default:complaint.student.username }} &middot; Room {{ complaint.student.student_profile.hostel_room|default:"—" }} &middot; {{ complaint.created_at|date:"d M Y, H:i" }}</p>
+  </div>
+  <div style="display:flex; gap:8px;">
+    <span class="chip sev-{{ complaint.severity|lower }}"><span class="chip-dot"></span>{{ complaint.get_severity_display }} severity</span>
+    <span class="status-pill status-{{ complaint.status }}">{{ complaint.get_status_display }}</span>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card-panel">
+    <div class="section-title">Description</div>
+    <p style="font-size:14.5px;">{{ complaint.description|linebreaks }}</p>
+    {% if complaint.image %}
+      <img src="{{ complaint.image.url }}" alt="Complaint photo" style="max-width:100%; border-radius:12px; border:1px solid var(--line); margin-top:6px;">
+    {% endif %}
+
+    <div class="ai-banner" style="margin-top:20px;">
+      🤖 <b>AI analysis</b> ({{ complaint.ai_engine_used }} engine, score {{ complaint.severity_score }}/100): {{ complaint.ai_explanation }}
+    </div>
+
+    {% if can_manage %}
+    <div class="section-title" style="margin-top:22px;">Update status</div>
+    {% if not complaint.assigned_warden %}
+      <a href="{% url 'assign_to_me' complaint.pk %}" class="btn-outline-hai" style="margin-bottom:14px; display:inline-block;">Assign to me</a>
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Status</label>
+        {{ status_form.status }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Note</label>
+        {{ status_form.note }}
+      </div>
+      <button type="submit" class="btn-primary-hai">Save update</button>
+    </form>
+    {% endif %}
+
+    <div class="section-title" style="margin-top:26px;">Activity log</div>
+    {% for u in updates %}
+      <div class="complaint-row">
+        <div class="complaint-row__main">
+          <div class="complaint-row__title" style="font-size:13.5px;">{{ u.note }}</div>
+          <div class="complaint-row__meta">{{ u.actor.get_full_name|default:u.actor.username }} &middot; {{ u.created_at|date:"d M, H:i" }}</div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-muted" style="font-size:13px;">No activity yet.</p>
+    {% endfor %}
+  </div>
+
+  <div>
+    <div class="card-panel" style="margin-bottom:18px;">
+      <div class="section-title">Resolution allocation</div>
+      <div class="stat-tile__label">Time allotted (by priority)</div>
+      <div class="stat-tile__value" style="font-size:24px;">{{ complaint.allocation_hours|floatformat:0 }}h</div>
+      <div class="stat-tile__sub">Deadline: {{ complaint.deadline|date:"d M Y, H:i" }}</div>
+      {% if complaint.is_overdue %}
+        <div class="deadline-tag overdue" style="margin-top:8px;">⚠ Overdue</div>
+      {% endif %}
+    </div>
+    <div class="card-panel">
+      <div class="section-title">Category</div>
+      <span class="status-pill">{{ complaint.get_category_display }}</span>
+      {% if complaint.assigned_warden %}
+        <div class="section-title" style="margin-top:18px;">Assigned warden</div>
+        <p style="font-size:14px;">{{ complaint.assigned_warden.get_full_name|default:complaint.assigned_warden.username }}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

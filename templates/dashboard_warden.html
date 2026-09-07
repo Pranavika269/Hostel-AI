@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Warden Dashboard · Hostel AI{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1>Priority queue</h1>
+    <p>Complaints are ordered by AI-predicted severity, then by nearest resolution deadline.</p>
+  </div>
+</div>
+
+<div class="stat-grid cols-5">
+  <div class="stat-tile stat-tile--accent">
+    <div class="stat-tile__label">Active complaints</div>
+    <div class="stat-tile__value">{{ stats.active }}</div>
+  </div>
+  <div class="stat-tile">
+    <div class="stat-tile__label">Assigned to me</div>
+    <div class="stat-tile__value">{{ stats.mine }}</div>
+  </div>
+  <div class="stat-tile">
+    <div class="stat-tile__label">Unassigned</div>
+    <div class="stat-tile__value">{{ stats.unassigned }}</div>
+  </div>
+  <div class="stat-tile stat-tile--warn">
+    <div class="stat-tile__label">Overdue</div>
+    <div class="stat-tile__value">{{ stats.overdue }}</div>
+  </div>
+  <div class="stat-tile">
+    <div class="stat-tile__label">Avg. resolution time</div>
+    <div class="stat-tile__value">{% if stats.avg_resolution_hours %}{{ stats.avg_resolution_hours }}h{% else %}—{% endif %}</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card-panel">
+    <div class="section-title">
+      <span>Queue ({{ active_list|length }})</span>
+    </div>
+    {% if active_list %}
+      {% for c in active_list %}
+      <div class="complaint-row">
+        <div class="complaint-row__main">
+          <div class="complaint-row__title"><a href="{% url 'complaint_detail' c.pk %}" style="color:inherit;">{{ c.title }}</a></div>
+          <div class="complaint-row__meta">
+            {{ c.student.get_full_name|default:c.student.username }} &middot; {{ c.get_category_display }}
+            {% if c.assigned_warden %} &middot; {{ c.assigned_warden.get_full_name|default:c.assigned_warden.username }}{% else %} &middot; unassigned{% endif %}
+          </div>
+        </div>
+        <div class="complaint-row__right">
+          <span class="chip sev-{{ c.severity|lower }}"><span class="chip-dot"></span>{{ c.get_severity_display }}</span>
+          <span class="status-pill status-{{ c.status }}">{{ c.get_status_display }}</span>
+          <span class="deadline-tag {{ c.deadline_state }}">{{ c.hours_left_display }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">The queue is empty — great job! 🎉</div>
+    {% endif %}
+  </div>
+
+  <div>
+    <div class="card-panel" style="margin-bottom:20px;">
+      <div class="section-title">Complaints by severity</div>
+      <canvas id="sevChart" height="170"></canvas>
+    </div>
+    <div class="card-panel">
+      <div class="section-title">Complaints by status</div>
+      <canvas id="statusChart" height="170"></canvas>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const sevData = {{ severity_data|safe }};
+const statusData = {{ status_data|safe }};
+new Chart(document.getElementById('sevChart'), {
+  type: 'bar',
+  data: { labels: Object.keys(sevData), datasets: [{ data: Object.values(sevData),
+    backgroundColor: ['#1C9C7E','#4A55D8','#DE9A2E','#D9484A'], borderRadius: 6 }] },
+  options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { precision: 0 } } } }
+});
+new Chart(document.getElementById('statusChart'), {
+  type: 'doughnut',
+  data: { labels: Object.keys(statusData), datasets: [{ data: Object.values(statusData),
+    backgroundColor: ['#DE9A2E','#4A55D8','#6E7391','#1C9C7E','#D9484A'] }] },
+  options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } } }
+});
+</script>
+{% endblock %}

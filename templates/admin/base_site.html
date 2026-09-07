@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ title }} · Hostel AI{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/admin_theme.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="site-name-wrap" style="display:flex; align-items:center; gap:10px;">
+  <span class="hai-mark">H</span>
+  <h1 id="site-name">
+    <a href="{% url 'admin:index' %}">Hostel AI <span class="hai-subtitle">Control Panel</span></a>
+  </h1>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

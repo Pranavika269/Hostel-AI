@@ -1,0 +1,148 @@
+/* ============================================================
+   Hostel AI — Django admin reskin
+   Overrides Django's built-in CSS custom properties (supported
+   since Django 3.2+) plus a few direct selectors for anything
+   that isn't variable-driven, so /admin/ matches the rest of
+   the app instead of the default green "Django administration"
+   look.
+   ============================================================ */
+
+:root {
+  --primary: #4A55D8;
+  --primary-fg: #fff;
+  --secondary: #2B3163;
+  --accent: #DE9A2E;
+
+  --header-color: #fff;
+  --header-branding-color: #fff;
+  --header-bg: #141833;
+  --header-link-color: #fff;
+
+  --breadcrumbs-fg: #C9CCE6;
+  --breadcrumbs-link-fg: #fff;
+  --breadcrumbs-bg: #1F2547;
+
+  --link-fg: #4A55D8;
+  --link-hover-color: #363FAE;
+  --link-selected-fg: #4A55D8;
+
+  --body-fg: #1A1D2E;
+  --body-bg: #F3F4F9;
+  --body-quiet-color: #666B8A;
+  --body-loud-color: #1A1D2E;
+
+  --hairline-color: #E3E5F0;
+  --border-color: #E3E5F0;
+
+  --button-bg: #4A55D8;
+  --button-fg: #fff;
+  --button-hover-bg: #363FAE;
+  --default-button-bg: #6E7391;
+  --default-button-hover-bg: #575c78;
+  --close-button-bg: #6E7391;
+  --close-button-hover-bg: #575c78;
+  --delete-button-bg: #D9484A;
+  --delete-button-hover-bg: #B23234;
+
+  --object-tools-bg: #4A55D8;
+  --object-tools-hover-bg: #363FAE;
+
+  --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+/* ---- Branding header ---- */
+#header {
+  background: linear-gradient(185deg, #141833 0%, #1F2547 100%) !important;
+  color: #fff;
+  padding: 12px 24px;
+}
+#branding h1, #branding h1 a:link, #branding h1 a:visited {
+  color: #fff !important;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+.hai-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 9px;
+  background: linear-gradient(135deg, #4A55D8, #8B6CF0);
+  color: #fff; font-weight: 700; font-family: 'Space Grotesk', sans-serif; font-size: 14px;
+  flex-shrink: 0;
+}
+.hai-subtitle { font-weight: 400; font-size: 13px; color: #B7BADB; margin-left: 4px; }
+
+#user-tools { color: #C9CCE6 !important; font-size: 12.5px; }
+#user-tools a { color: #fff !important; }
+#user-tools a:hover { color: #DE9A2E !important; }
+
+/* ---- Breadcrumbs ---- */
+div.breadcrumbs {
+  background: #1F2547 !important;
+  color: #C9CCE6 !important;
+  font-size: 12.5px;
+  padding: 10px 24px;
+}
+div.breadcrumbs a { color: #fff !important; }
+div.breadcrumbs a:hover { color: #DE9A2E !important; }
+
+/* ---- Module / result list panels ---- */
+.module h2, .module caption, .inline-group h2 {
+  background: #4A55D8 !important;
+  color: #fff !important;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-weight: 600;
+}
+#content-related .module h2 { background: #2B3163 !important; }
+
+.dashboard .module table th { font-size: 13px; }
+table thead th { background: #F3F4F9 !important; color: #1A1D2E !important; }
+
+/* ---- Buttons ---- */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+  background: #4A55D8 !important;
+  border-radius: 8px !important;
+  border: none !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+}
+.button:hover, input[type=submit]:hover, input[type=button]:hover, a.button:hover {
+  background: #363FAE !important;
+}
+.button.default, input[type=submit].default, .submit-row input.default {
+  background: #DE9A2E !important;
+  color: #1A1D2E !important;
+}
+.button.default:hover, input[type=submit].default:hover {
+  background: #B9781F !important;
+}
+.deletelink, a.deletelink {
+  background: #D9484A !important; border-radius: 8px !important;
+}
+
+/* ---- Object tools (Add button top-right) ---- */
+.object-tools a.addlink {
+  background: #4A55D8 !important; border-radius: 8px !important;
+}
+.object-tools a.addlink:hover { background: #363FAE !important; }
+
+/* ---- Login page ---- */
+.login {
+  background: radial-gradient(circle at 15% 20%, #1F2547 0%, #141833 55%, #0F1226 100%) !important;
+}
+.login #container {
+  background: #fff; border-radius: 18px; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.5);
+  padding: 10px 8px;
+}
+.login .submit-row input {
+  background: #4A55D8 !important; border-radius: 8px !important; font-weight: 700 !important;
+}
+
+/* ---- Misc polish ---- */
+a:link, a:visited { color: #4A55D8; }
+.selector-chosen h2, .selector-available h2 { background: #2B3163 !important; }
+.paginator a:link, .paginator a:visited { background: #4A55D8 !important; border-radius: 6px; }

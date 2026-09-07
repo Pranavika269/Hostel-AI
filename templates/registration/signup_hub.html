@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Create account · Hostel AI{% endblock %}
+{% block auth_content %}
+<div class="auth-wrap">
+  <div class="auth-card" style="max-width:560px;">
+    <div class="brand">
+      <div class="brand__mark" style="background:linear-gradient(135deg,#4A55D8,#8B6CF0);">H</div>
+      <div class="brand__text" style="color:#1A1D2E;">Hostel AI<small style="color:#666B8A;">Grievance Intelligence</small></div>
+    </div>
+    <h2 style="font-size:19px; margin-bottom:2px;">Create an account</h2>
+    <p style="color:#666B8A; font-size:13.5px; margin-bottom:22px;">
+      Choose the account type that matches you. Each one has its own dedicated
+      sign-up page with just its own username and password.
+    </p>
+
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <a href="{% url 'signup_student' %}" class="card-panel" style="display:flex; align-items:center; justify-content:space-between; text-decoration:none; padding:16px 18px;">
+        <div>
+          <div style="font-weight:700; color:#1A1D2E; font-size:14.5px;">Student</div>
+          <div style="color:#666B8A; font-size:12.5px;">Submit and track your own hostel complaints.</div>
+        </div>
+        <span style="color:#4A55D8; font-weight:700;">&rarr;</span>
+      </a>
+      <a href="{% url 'signup_parent' %}" class="card-panel" style="display:flex; align-items:center; justify-content:space-between; text-decoration:none; padding:16px 18px;">
+        <div>
+          <div style="font-weight:700; color:#1A1D2E; font-size:14.5px;">Parent</div>
+          <div style="color:#666B8A; font-size:12.5px;">View your child's complaint reports. Also creates your child's student login.</div>
+        </div>
+        <span style="color:#4A55D8; font-weight:700;">&rarr;</span>
+      </a>
+      <a href="{% url 'signup_warden' %}" class="card-panel" style="display:flex; align-items:center; justify-content:space-between; text-decoration:none; padding:16px 18px; border-left:3px solid #4A55D8;">
+        <div>
+          <div style="font-weight:700; color:#1A1D2E; font-size:14.5px;">Warden</div>
+          <div style="color:#666B8A; font-size:12.5px;">Check severity, manage, and resolve complaints. Requires a staff signup code.</div>
+        </div>
+        <span style="color:#4A55D8; font-weight:700;">&rarr;</span>
+      </a>
+      <a href="{% url 'signup_admin' %}" class="card-panel" style="display:flex; align-items:center; justify-content:space-between; text-decoration:none; padding:16px 18px; border-left:3px solid #4A55D8;">
+        <div>
+          <div style="font-weight:700; color:#1A1D2E; font-size:14.5px;">Admin</div>
+          <div style="color:#666B8A; font-size:12.5px;">Full access with CRUD operations. Requires a staff signup code.</div>
+        </div>
+        <span style="color:#4A55D8; font-weight:700;">&rarr;</span>
+      </a>
+    </div>
+
+    <p style="text-align:center; font-size:13px; margin-top:22px; color:#666B8A;">
+      Already have an account? <a href="{% url 'login' %}" style="color:#4A55D8; font-weight:600;">Student / Parent login</a>
+      &middot; <a href="{% url 'staff_login' %}" style="color:#666B8A;">Staff login</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

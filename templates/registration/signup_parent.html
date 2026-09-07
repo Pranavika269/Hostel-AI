@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Create Parent account · Hostel AI{% endblock %}
+{% block auth_content %}
+<div class="auth-wrap">
+  <div class="auth-card" style="max-width:480px;">
+    <div class="brand">
+      <div class="brand__mark" style="background:linear-gradient(135deg,#4A55D8,#8B6CF0);">H</div>
+      <div class="brand__text" style="color:#1A1D2E;">Hostel AI<small style="color:#666B8A;">Parent sign up</small></div>
+    </div>
+    <h2 style="font-size:19px; margin-bottom:2px;">Create your parent account</h2>
+    <p style="color:#666B8A; font-size:13.5px; margin-bottom:18px;">
+      Set your own username and password. This same form also creates your
+      child's student login, so the link between you is always correct.
+    </p>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="section-title" style="margin-bottom:10px;">Your account</div>
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label class="form-label">{{ form.first_name.label }}</label>
+          {{ form.first_name }}
+        </div>
+        <div class="col-6 mb-3">
+          <label class="form-label">{{ form.last_name.label }}</label>
+          {{ form.last_name }}
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ form.username.label }}</label>
+        {{ form.username }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        {{ form.email }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Phone</label>
+        {{ form.phone }}
+      </div>
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label class="form-label">{{ form.password1.label }}</label>
+          {{ form.password1 }}
+        </div>
+        <div class="col-6 mb-3">
+          <label class="form-label">{{ form.password2.label }}</label>
+          {{ form.password2 }}
+        </div>
+      </div>
+
+      <hr style="margin:6px 0 16px; border-color:var(--line);">
+      <div class="section-title" style="margin-bottom:12px;">Your child's student account</div>
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label class="form-label">{{ form.child_first_name.label }}</label>
+          {{ form.child_first_name }}
+        </div>
+        <div class="col-6 mb-3">
+          <label class="form-label">{{ form.child_last_name.label }}</label>
+          {{ form.child_last_name }}
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ form.child_username.label }}</label>
+        {{ form.child_username }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ form.child_hostel_room.label }}</label>
+        {{ form.child_hostel_room }}
+      </div>
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label class="form-label">{{ form.child_password1.label }}</label>
+          {{ form.child_password1 }}
+        </div>
+        <div class="col-6 mb-3">
+          <label class="form-label">{{ form.child_password2.label }}</label>
+          {{ form.child_password2 }}
+        </div>
+      </div>
+      <div class="form-text" style="font-size:12px; margin-top:-6px; margin-bottom:6px;">
+        Your child logs in with this username/password to submit and track their own complaints.
+      </div>
+
+      {% for field in form %}
+        {% for error in field.errors %}
+          <div class="text-danger" style="font-size:12.5px; margin-top:-8px; margin-bottom:8px;">{{ field.label }}: {{ error }}</div>
+        {% endfor %}
+      {% endfor %}
+
+      <button type="submit" class="btn-primary-hai w-100 mt-2">Create parent account</button>
+    </form>
+    <p style="text-align:center; font-size:13px; margin-top:16px; color:#666B8A;">
+      Already have an account? <a href="{% url 'login' %}" style="color:#4A55D8; font-weight:600;">Sign in</a>
+    </p>
+    <p style="text-align:center; font-size:12.5px; margin-top:6px;">
+      <a href="{% url 'signup' %}" style="color:#666B8A;">&larr; Choose a different account type</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

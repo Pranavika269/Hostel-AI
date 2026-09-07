@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard · Hostel AI{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1>Hi {{ user.first_name|default:user.username }} 👋</h1>
+    <p>Track your hostel complaints and their AI-predicted resolution timelines.</p>
+  </div>
+  <a href="{% url 'complaint_create' %}" class="btn-primary-hai" style="display:flex;align-items:center;">+ Submit a complaint</a>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-tile stat-tile--accent">
+    <div class="stat-tile__label">Total complaints</div>
+    <div class="stat-tile__value">{{ stats.total }}</div>
+    <div class="stat-tile__sub">Since you joined</div>
+  </div>
+  <div class="stat-tile">
+    <div class="stat-tile__label">Pending review</div>
+    <div class="stat-tile__value">{{ stats.pending }}</div>
+    <div class="stat-tile__sub">Awaiting warden action</div>
+  </div>
+  <div class="stat-tile">
+    <div class="stat-tile__label">In progress</div>
+    <div class="stat-tile__value">{{ stats.in_progress }}</div>
+    <div class="stat-tile__sub">Being worked on</div>
+  </div>
+  <div class="stat-tile">
+    <div class="stat-tile__label">Resolved</div>
+    <div class="stat-tile__value">{{ stats.resolved }}</div>
+    <div class="stat-tile__sub">Closed out</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card-panel">
+    <div class="section-title">Your complaints</div>
+    {% if complaints %}
+      {% for c in complaints %}
+      <div class="complaint-row">
+        <div class="complaint-row__main">
+          <div class="complaint-row__title"><a href="{% url 'complaint_detail' c.pk %}" style="color:inherit;">{{ c.title }}</a></div>
+          <div class="complaint-row__meta">{{ c.get_category_display }} &middot; submitted {{ c.created_at|timesince }} ago</div>
+        </div>
+        <div class="complaint-row__right">
+          <span class="chip sev-{{ c.severity|lower }}"><span class="chip-dot"></span>{{ c.get_severity_display }}</span>
+          <span class="status-pill status-{{ c.status }}">{{ c.get_status_display }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">No complaints yet. Submitted issues will appear here with an AI-predicted severity and resolution deadline.</div>
+    {% endif %}
+  </div>
+
+  <div class="card-panel">
+    <div class="section-title">By category</div>
+    <canvas id="catChart" height="180"></canvas>
+    <div class="section-title" style="margin-top:22px;">By severity</div>
+    <canvas id="sevChart" height="180"></canvas>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const catData = {{ category_data|safe }};
+const sevData = {{ severity_data|safe }};
+new Chart(document.getElementById('catChart'), {
+  type: 'doughnut',
+  data: { labels: Object.keys(catData), datasets: [{ data: Object.values(catData),
+    backgroundColor: ['#4A55D8','#DE9A2E','#1C9C7E','#D9484A','#6E7391'] }] },
+  options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } } }
+});
+new Chart(document.getElementById('sevChart'), {
+  type: 'bar',
+  data: { labels: Object.keys(sevData), datasets: [{ data: Object.values(sevData),
+    backgroundColor: '#4A55D8', borderRadius: 6 }] },
+  options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+});
+</script>
+{% endblock %}

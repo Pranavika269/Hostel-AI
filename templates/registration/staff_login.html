@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Staff Login · Hostel AI{% endblock %}
+{% block auth_content %}
+<div class="auth-wrap" style="background: radial-gradient(circle at 85% 15%, #2B3163 0%, #141833 55%, #0F1226 100%);">
+  <div class="auth-card" style="border-top:3px solid #4A55D8;">
+    <div class="brand">
+      <div class="brand__mark" style="background:linear-gradient(135deg,#4A55D8,#363FAE);">H</div>
+      <div class="brand__text" style="color:#1A1D2E;">Hostel AI<small style="color:#666B8A;">Staff Portal</small></div>
+    </div>
+    <h2 style="font-size:19px; margin-bottom:2px;">Warden &amp; Admin sign in</h2>
+    <p style="color:#666B8A; font-size:13.5px; margin-bottom:20px;">
+      Restricted to Warden and Admin accounts issued by hostel administration.
+    </p>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger py-2 px-3" style="font-size:13px; border-radius:8px;">
+        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Staff username</label>
+        <input type="text" name="username" class="form-control" required autofocus>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" required>
+      </div>
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" class="btn w-100 mt-2" style="background:#4A55D8; color:#fff; font-weight:700; border:none; border-radius:8px; padding:9px 18px; font-size:14px;">Sign in to staff portal</button>
+    </form>
+
+    <div class="demo-box" style="margin-top:20px;">
+      Don't have a staff account yet? <a href="{% url 'signup' %}" style="color:#363FAE; font-weight:600;">Create one</a>
+      <span style="color:#8B8FA8;">(Warden or Admin)</span> —
+      you'll need the staff signup code from hostel administration.
+    </div>
+
+    <p style="text-align:center; font-size:12.5px; margin-top:16px;">
+      <a href="{% url 'login' %}" style="color:#666B8A;">&larr; Student / Parent login</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

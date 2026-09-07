@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Create Admin account · Hostel AI{% endblock %}
+{% block auth_content %}
+<div class="auth-wrap" style="background: radial-gradient(circle at 85% 15%, #2B3163 0%, #141833 55%, #0F1226 100%);">
+  <div class="auth-card" style="max-width:440px; border-top:3px solid #4A55D8;">
+    <div class="brand">
+      <div class="brand__mark" style="background:linear-gradient(135deg,#4A55D8,#363FAE);">H</div>
+      <div class="brand__text" style="color:#1A1D2E;">Hostel AI<small style="color:#666B8A;">Admin sign up</small></div>
+    </div>
+    <h2 style="font-size:19px; margin-bottom:2px;">Create your admin account</h2>
+    <p style="color:#666B8A; font-size:13.5px; margin-bottom:18px;">
+      Set your own username and password for full access with CRUD operations.
+    </p>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label class="form-label">{{ form.first_name.label }}</label>
+          {{ form.first_name }}
+        </div>
+        <div class="col-6 mb-3">
+          <label class="form-label">{{ form.last_name.label }}</label>
+          {{ form.last_name }}
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ form.username.label }}</label>
+        {{ form.username }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        {{ form.email }}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Phone</label>
+        {{ form.phone }}
+      </div>
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label class="form-label">Password</label>
+          {{ form.password1 }}
+        </div>
+        <div class="col-6 mb-3">
+          <label class="form-label">Confirm password</label>
+          {{ form.password2 }}
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">{{ form.staff_code.label }}</label>
+        {{ form.staff_code }}
+        <div class="form-text" style="font-size:12px;">{{ form.staff_code.help_text }}</div>
+      </div>
+
+      {% for field in form %}
+        {% for error in field.errors %}
+          <div class="text-danger" style="font-size:12.5px; margin-top:-8px; margin-bottom:8px;">{{ field.label }}: {{ error }}</div>
+        {% endfor %}
+      {% endfor %}
+
+      <button type="submit" class="btn w-100 mt-2" style="background:#4A55D8; color:#fff; font-weight:700; border:none; border-radius:8px; padding:9px 18px; font-size:14px;">Create admin account</button>
+    </form>
+    <p style="text-align:center; font-size:13px; margin-top:16px; color:#666B8A;">
+      Already have an account? <a href="{% url 'staff_login' %}" style="color:#4A55D8; font-weight:600;">Sign in</a>
+    </p>
+    <p style="text-align:center; font-size:12.5px; margin-top:6px;">
+      <a href="{% url 'signup' %}" style="color:#666B8A;">&larr; Choose a different account type</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

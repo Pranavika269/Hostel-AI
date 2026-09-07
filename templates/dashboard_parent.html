@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Parent Dashboard · Hostel AI{% endblock %}
+{% block content %}
+<div class="topbar">
+  <div>
+    <h1>Family overview</h1>
+    <p>A read-only view of your ward's hostel grievances and how quickly they're being resolved.</p>
+  </div>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-tile stat-tile--accent">
+    <div class="stat-tile__label">Children linked</div>
+    <div class="stat-tile__value">{{ stats.children_count }}</div>
+    <div class="stat-tile__sub">Connected to your account</div>
+  </div>
+  <div class="stat-tile">
+    <div class="stat-tile__label">Total complaints</div>
+    <div class="stat-tile__value">{{ stats.total }}</div>
+  </div>
+  <div class="stat-tile">
+    <div class="stat-tile__label">Open</div>
+    <div class="stat-tile__value">{{ stats.pending }}</div>
+  </div>
+  <div class="stat-tile stat-tile--warn">
+    <div class="stat-tile__label">Critical (all-time)</div>
+    <div class="stat-tile__value">{{ stats.critical }}</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card-panel">
+    <div class="section-title">Complaint history</div>
+    {% if complaints %}
+      {% for c in complaints %}
+      <div class="complaint-row">
+        <div class="complaint-row__main">
+          <div class="complaint-row__title"><a href="{% url 'complaint_detail' c.pk %}" style="color:inherit;">{{ c.title }}</a></div>
+          <div class="complaint-row__meta">{{ c.student.get_full_name|default:c.student.username }} &middot; {{ c.get_category_display }} &middot; {{ c.created_at|timesince }} ago</div>
+        </div>
+        <div class="complaint-row__right">
+          <span class="chip sev-{{ c.severity|lower }}"><span class="chip-dot"></span>{{ c.get_severity_display }}</span>
+          <span class="status-pill status-{{ c.status }}">{{ c.get_status_display }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty-state">No complaints filed by your ward yet.</div>
+    {% endif %}
+  </div>
+  <div class="card-panel">
+    <div class="section-title">Category breakdown</div>
+    <canvas id="catChart" height="180"></canvas>
+    <div class="section-title" style="margin-top:22px;">Severity breakdown</div>
+    <canvas id="sevChart" height="180"></canvas>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const catData = {{ category_data|safe }};
+const sevData = {{ severity_data|safe }};
+new Chart(document.getElementById('catChart'), {
+  type: 'doughnut',
+  data: { labels: Object.keys(catData), datasets: [{ data: Object.values(catData),
+    backgroundColor: ['#4A55D8','#DE9A2E','#1C9C7E','#D9484A','#6E7391'] }] },
+  options: { plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 11 } } } } }
+});
+new Chart(document.getElementById('sevChart'), {
+  type: 'bar',
+  data: { labels: Object.keys(sevData), datasets: [{ data: Object.values(sevData),
+    backgroundColor: '#DE9A2E', borderRadius: 6 }] },
+  options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+});
+</script>
+{% endblock %}
