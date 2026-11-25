@@ -178,3 +178,4 @@ static/css/style.css       # custom design system
 - SQLite is used out of the box — no database setup needed to try it locally.
 - There is no seed/demo data command in this build — create your own Admin
   with `createsuperuser`, then add Wardens and let Students/Parents sign up.
+More useful for the college management 
